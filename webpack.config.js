@@ -1,20 +1,32 @@
-// webpack.config.js
 const path = require("path");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, "./src/index.js"),
+    clientCode: path.resolve(__dirname, "src/clientCode.js"),
   },
   output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "bundle.js",
-  },
+    path: path.resolve(__dirname, "app"),
+    filename: "[name].bundle.js",
+  }, 
+    resolve: { 
+      extensions: [".js", ".vue"],
+        alias: {
+          components: path.resolve(__dirname, "src/components")
+        }
+    },
   module: {
     rules: [
+        
+        {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
       {
-        test: /\.(tsx|ts)?$/,
-        loader: "ts-loader",
+        test: /\.css$/,
+        use: ["vue-style-loader", "css-loader"],
       },
     ],
   },
+  plugins: [new VueLoaderPlugin()],
 };
